@@ -1,0 +1,97 @@
+# The following lines were added by compinstall
+
+zstyle ':completion:*' completer _complete _ignored _approximate
+zstyle :compinstall filename "$HOME/.zshrc.local"
+
+autoload -Uz compinit
+compinit
+# End of lines added by compinstall
+# Lines configured by zsh-newuser-install
+HISTFILE=~/.histfile
+HISTSIZE=10000
+SAVEHIST=10000
+setopt beep
+bindkey -e
+# End of lines configured by zsh-newuser-install
+autoload colors
+colors
+local smiley="%(?,%{$fg[green]%}:%)%{$reset_color%},%{$fg[red]%}:(%{$reset_color%})"
+PROMPT="[%n@%m] ${smiley} %# "
+RPROMPT='%~'
+
+WORDCHARS=${WORDCHARS//\/}
+
+# Virtualenv support
+
+function virtual_env_prompt () {
+    REPLY=${VIRTUAL_ENV+(${VIRTUAL_ENV:t}) }
+}
+grml_theme_add_token  virtual-env -f virtual_env_prompt '%F{magenta}' '%f'
+zstyle ':prompt:grml:left:setup' items rc virtual-env change-root user at host path vcs percent
+
+alias ls='ls --color=auto'
+eval `dircolors -b`
+export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
+export CLICOLOR=1
+zstyle ':completion:*:default' list-colors ''
+
+export GREP_COLOR="1;33"
+alias grep='grep --color=auto'
+export LESS_TERMCAP_mb=$'\E[01;31m'
+export LESS_TERMCAP_md=$'\E[01;31m'
+export LESS_TERMCAP_me=$'\E[0m'
+export LESS_TERMCAP_se=$'\E[0m'
+export LESS_TERMCAP_so=$'\E[01;44;33m'
+export LESS_TERMCAP_ue=$'\E[0m'
+export LESS_TERMCAP_us=$'\E[01;32m'
+
+unalias ag 2>/dev/null || true
+alias ag='ag --path-to-ignore ~/.ignore'
+
+export PATH=$PATH:~/bin:$(go env GOPATH)/bin
+export GOPATH=$(go env GOPATH)
+export EDITOR=/bin/vim
+export VISUAL=/bin/vim
+stty stop undef
+
+if [ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
+    source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+else
+    source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
+if [ -f ~/.fzf.zsh ]; then
+    source ~/.fzf.zsh
+else
+    source /usr/share/fzf/key-bindings.zsh
+    source /usr/share/fzf/completion.zsh
+fi
+export FZF_COMPLETION_TRIGGER='~~'
+export WORKON_HOME=~/.virtualenvs
+if [ -f /usr/share/virtualenvwrapper/virtualenvwrapper.sh ]; then
+    source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
+else
+    source /usr/bin/virtualenvwrapper.sh
+fi
+export GIT_SSH=/usr/bin/ssh
+export QT_STYLE_OVERRIDE=adwaita
+export GTK_THEME=Adwaita:dark
+
+if [ $commands[minikube] ]; then
+    source <(minikube completion zsh)
+
+    export MINIKUBE_WANTUPDATENOTIFICATION=false
+    export MINIKUBE_WANTREPORTERRORPROMPT=false
+    export MINIKUBE_HOME=$HOME
+    export CHANGE_MINIKUBE_NONE_USER=true
+    if [ ! -f $HOME/.kube/config ]; then
+        mkdir -p $HOME/.kube
+        touch $HOME/.kube/config
+    fi
+    export KUBECONFIG=$HOME/.kube/config
+fi
+
+if [ -f /usr/bin/aws_zsh_completer.sh ]; then
+    source /usr/bin/aws_zsh_completer.sh
+fi
+
+fortune | cowsay -n
