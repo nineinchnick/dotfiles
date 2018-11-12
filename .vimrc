@@ -19,9 +19,10 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 function! BuildYCM(info)
   if a:info.status == 'installed' || a:info.force
-    !./install.sh --go-completer
+    !./install.py --go-completer
   endif
 endfunction
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'vim-scripts/restore_view.vim'
 Plug 'tpope/vim-fugitive'
@@ -49,6 +50,8 @@ Plug 'hail2u/vim-css3-syntax'
 Plug 'gorodinskiy/vim-coloresque'
 Plug 'tpope/vim-markdown'
 Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
+Plug 'ambv/black'
+Plug 'andviro/flake8-vim'
 call plug#end()
 
 
@@ -114,6 +117,7 @@ if has('statusline')
     set statusline+=\ [%{getcwd()}]          " Current dir
     set statusline+=%=%-14.(%l,%c%V%)\ %p%%  " Right aligned file nav info
 endif
+let g:airline_powerline_fonts = 1
 
 set backspace=indent,eol,start  " Backspace for dummies
 set linespace=0                 " No extra spaces between rows
@@ -176,6 +180,9 @@ endif
 
 cmap Tabe tabe
 map <leader>fc /\v^[<\|=>]{7}( .*\|$)<CR>
+
+map <leader>fz :FZF<CR>
+map <leader>fa :Ag<CR>
 
 " Mapping selecting mappings
 nmap <leader><tab> <plug>(fzf-maps-n)
@@ -280,7 +287,7 @@ let g:syntastic_python_checkers = ['flake8']
 let g:syntastic_check_on_wq = 0
 let g:sql_type_default = 'postgresql'
 
-let g:ycm_server_python_interpreter = '/usr/bin/python2'
+let g:ycm_server_python_interpreter = '/usr/bin/python'
 
 :vnoremap <leader>64e c<c-r>=system("base64 -w 0", @")<cr><esc>
 :vnoremap <leader>64d c<c-r>=system("base64 -d", @")<cr><esc>
@@ -317,7 +324,7 @@ endfunction
 autocmd FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
 autocmd FileType go nmap <leader>r <Plug>(go-run)
 autocmd FileType go nmap <leader>t <Plug>(go-test)
-autocmd FileType go nmap <leader>f <Plug>(go-test-func)
+autocmd FileType go nmap <leader>ff <Plug>(go-test-func)
 autocmd FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
 autocmd FileType go nmap <Leader>i <Plug>(go-info)
 autocmd Filetype go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
@@ -328,3 +335,6 @@ autocmd Filetype go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
 function! FileOffset()
     return line2byte(line('.')) + col('.') - 1
 endfunction
+
+let g:PyFlakeOnWrite = 1
+autocmd BufWritePre *.py execute ':Black'

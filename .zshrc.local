@@ -94,4 +94,8 @@ if [ -f /usr/bin/aws_zsh_completer.sh ]; then
     source /usr/bin/aws_zsh_completer.sh
 fi
 
+if [ $commands[blue-cli] ]; then
+  source <(blue-cli completion zsh)
+fi
+
 fortune | cowsay -n
