@@ -1,6 +1,7 @@
 set nocompatible
 set autowrite
 set background=dark         " Assume a dark background
+set term=xterm-256color
 
 call plug#begin('~/.vim/plugged')
 if executable('ag')
@@ -154,7 +155,7 @@ set pastetoggle=<F2>            " pastetoggle (sane indentation on pastes)
 "set comments=sl:/*,mb:*,elx:*/  " auto format comment blocks
 autocmd BufNewFile,BufRead *.html.twig set filetype=html.twig
 autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4
-autocmd FileType haskell,puppet,ruby,yml setlocal expandtab shiftwidth=2 softtabstop=2
+autocmd FileType haskell,puppet,ruby,yml,yaml setlocal expandtab shiftwidth=2 softtabstop=2
 " preceding line best in a plugin but here for now.
 
 autocmd BufNewFile,BufRead *.coffee set filetype=coffee
@@ -302,7 +303,7 @@ let g:go_highlight_fields = 1
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
 let g:go_metalinter_autosave = 1
-let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck', 'misspell', 'vetshadow', 'gotype', 'megacheck', 'goconst', 'ineffassign', 'staticcheck', 'gocyclo', 'gosec']
+"let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck', 'misspell', 'vetshadow', 'gotype', 'megacheck', 'goconst', 'ineffassign', 'staticcheck', 'gocyclo', 'gosec']
 let g:go_metalinter_deadline = "15s"
 let g:go_list_type = "quickfix"
 let g:go_auto_type_info = 1

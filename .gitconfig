@@ -1,0 +1,11 @@
+[diff]
+	tool = meld
+[help]
+	autocorrect = 1
+[alias]
+	co = checkout
+	ci = commit
+	st = status
+    br = branch
+[protocol]
+	version = 2
