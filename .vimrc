@@ -53,6 +53,7 @@ Plug 'tpope/vim-markdown'
 Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 Plug 'ambv/black'
 Plug 'andviro/flake8-vim'
+Plug 'z0mbix/vim-shfmt', { 'for': 'sh' }
 call plug#end()
 
 
@@ -339,3 +340,5 @@ endfunction
 
 let g:PyFlakeOnWrite = 1
 autocmd BufWritePre *.py execute ':Black'
+
+let g:shfmt_fmt_on_save = 1
