@@ -76,6 +76,13 @@ export GIT_SSH=/usr/bin/ssh
 export QT_STYLE_OVERRIDE=adwaita
 export GTK_THEME=Adwaita:dark
 
+if ! pgrep -u "$USER" ssh-agent > /dev/null; then
+    ssh-agent > ~/.ssh-agent-thing
+fi
+if [[ ! "$SSH_AUTH_SOCK" ]]; then
+    eval "$(<~/.ssh-agent-thing)"
+fi
+
 if [ $commands[minikube] ]; then
     source <(minikube completion zsh)
 
@@ -94,8 +101,8 @@ if [ -f /usr/bin/aws_zsh_completer.sh ]; then
     source /usr/bin/aws_zsh_completer.sh
 fi
 
-if [ $commands[blue-cli] ]; then
-  source <(blue-cli completion zsh)
+if [ $commands[kind] ]; then
+  source <(kind completion zsh)
 fi
 
 fortune | cowsay -n
