@@ -287,6 +287,7 @@ let g:syntastic_always_populate_loc_list = 1
 " let g:syntastic_auto_loc_list = 1
 let g:syntastic_python_checkers = ['flake8']
 let g:syntastic_check_on_wq = 0
+let g:syntastic_sh_shellcheck_args = "-x"
 let g:sql_type_default = 'postgresql'
 
 let g:ycm_server_python_interpreter = '/usr/bin/python'
@@ -298,6 +299,9 @@ let g:markdown_fenced_languages = ['html', 'go', 'vim', 'python', 'bash=sh']
 let g:markdown_syntax_conceal = 0
 
 let g:go_fmt_command = "goimports"
+let g:go_fmt_options = {
+    \ 'gofmt': '-s',
+\ }
 let g:go_fmt_fail_silently = 1
 let g:go_highlight_types = 1
 let g:go_highlight_fields = 1
@@ -306,6 +310,7 @@ let g:go_highlight_methods = 1
 let g:go_metalinter_autosave = 1
 "let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck', 'misspell', 'vetshadow', 'gotype', 'megacheck', 'goconst', 'ineffassign', 'staticcheck', 'gocyclo', 'gosec']
 let g:go_metalinter_deadline = "15s"
+"let g:go_metalinter_command='golangci-lint'
 let g:go_list_type = "quickfix"
 let g:go_auto_type_info = 1
 let g:go_auto_sameids = 1

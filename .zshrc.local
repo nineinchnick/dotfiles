@@ -48,7 +48,7 @@ export LESS_TERMCAP_us=$'\E[01;32m'
 unalias ag 2>/dev/null || true
 alias ag='ag --path-to-ignore ~/.ignore'
 
-export PATH=$PATH:~/bin:$(go env GOPATH)/bin
+export PATH=${KREW_ROOT:-$HOME/.krew}/bin:~/bin:$(go env GOPATH)/bin:$PATH
 export GOPATH=$(go env GOPATH)
 export EDITOR=/bin/vim
 export VISUAL=/bin/vim
@@ -75,6 +75,8 @@ fi
 export GIT_SSH=/usr/bin/ssh
 export QT_STYLE_OVERRIDE=adwaita
 export GTK_THEME=Adwaita:dark
+export DOCKER_BUILDKIT=0
+export ANSIBLE_NOCOWS=1
 
 if ! pgrep -u "$USER" ssh-agent > /dev/null; then
     ssh-agent > ~/.ssh-agent-thing
@@ -103,6 +105,10 @@ fi
 
 if [ $commands[kind] ]; then
   source <(kind completion zsh)
+fi
+
+if [ -f /usr/share/nvm/init-nvm.sh ]; then
+    source /usr/share/nvm/init-nvm.sh
 fi
 
 fortune | cowsay -n
