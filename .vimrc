@@ -40,6 +40,7 @@ Plug 'tobyS/vmustache'
 Plug 'mustache/vim-mustache-handlebars'
 Plug 'SirVer/ultisnips'
 Plug 'vim-scripts/SQLComplete.vim'
+Plug 'b4b4r07/vim-sqlfmt'
 Plug 'vim-scripts/dbext.vim'
 Plug 'vim-vdebug/vdebug'
 Plug 'beyondwords/vim-twig'
@@ -289,6 +290,11 @@ let g:syntastic_python_checkers = ['flake8']
 let g:syntastic_check_on_wq = 0
 let g:syntastic_sh_shellcheck_args = "-x"
 let g:sql_type_default = 'postgresql'
+" or sqlformat, requires python sqlparse to be installed
+" and setting options to -r -k upper
+let g:sqlfmt_command = "sqlfmt"
+let g:sqlfmt_options = ""
+let g:sqlfmt_auto = 1
 
 let g:ycm_server_python_interpreter = '/usr/bin/python'
 
