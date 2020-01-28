@@ -9,3 +9,5 @@
     br = branch
 [protocol]
 	version = 2
+[init]
+	templatedir = ~/.git_template
