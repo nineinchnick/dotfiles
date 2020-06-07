@@ -6,7 +6,7 @@ set term=xterm-256color
 call plug#begin('~/.vim/plugged')
 if executable('ag')
     Plug 'mileszs/ack.vim'
-    let g:ackprg = 'ag --nogroup --nocolor --column --smart-case'
+    let g:ackprg = 'ag --nogroup --nocolor --column --smart-case --path-to-ignore ~/.ignore'
 elseif executable('ack-grep')
     let g:ackprg="ack-grep -H --nocolor --nogroup --column"
     Plug 'mileszs/ack.vim'
@@ -186,6 +186,7 @@ map <leader>fc /\v^[<\|=>]{7}( .*\|$)<CR>
 
 map <leader>fz :FZF<CR>
 map <leader>fa :Ag<CR>
+command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, "--path-to-ignore ~/.ignore", <bang>0)
 
 " Mapping selecting mappings
 nmap <leader><tab> <plug>(fzf-maps-n)
