@@ -6,7 +6,7 @@ set term=xterm-256color
 call plug#begin('~/.vim/plugged')
 if executable('ag')
     Plug 'mileszs/ack.vim'
-    let g:ackprg = 'ag --nogroup --nocolor --column --smart-case --path-to-ignore ~/.ignore'
+    let g:ackprg = 'ag --vimgrep --path-to-ignore ~/.ignore'
 elseif executable('ack-grep')
     let g:ackprg="ack-grep -H --nocolor --nogroup --column"
     Plug 'mileszs/ack.vim'
@@ -20,7 +20,7 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 function! BuildYCM(info)
   if a:info.status == 'installed' || a:info.force
-    !./install.py --go-completer
+    !./install.py --go-completer --clang-completer
   endif
 endfunction
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -31,8 +31,6 @@ Plug 'mhinz/vim-signify'          " displays VCS changes
 Plug 'scrooloose/syntastic'       " run syntax checkers
 Plug 'scrooloose/nerdcommenter'   " <Leader>cX for commenting code
 Plug 'godlygeek/tabular'          " aligning text
-Plug 'scrooloose/nerdtree'
-Plug 'jistr/vim-nerdtree-tabs'
 Plug 'mbbill/undotree'
 Plug 'bling/vim-airline'
 Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
@@ -52,7 +50,7 @@ Plug 'hail2u/vim-css3-syntax'
 Plug 'gorodinskiy/vim-coloresque'
 Plug 'tpope/vim-markdown'
 Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
-Plug 'ambv/black'
+Plug 'psf/black', { 'tag': '19.10b0' }
 Plug 'andviro/flake8-vim'
 Plug 'z0mbix/vim-shfmt', { 'for': 'sh' }
 call plug#end()
@@ -222,21 +220,6 @@ if isdirectory(expand("~/.vim/plugged/vim-fugitive/"))
     nnoremap <silent> <leader>gg :SignifyToggle<CR>
 endif
 
-if isdirectory(expand("~/.vim/plugged/nerdtree"))
-    map <C-e> <plug>NERDTreeTabsToggle<CR>
-    map <leader>e :NERDTreeFind<CR>
-    nmap <leader>nt :NERDTreeFind<CR>
-
-    let NERDTreeShowBookmarks=1
-    let NERDTreeIgnore=['\.py[cd]$', '\~$', '\.swo$', '\.swp$', '^\.git$', '^\.hg$', '^\.svn$', '\.bzr$']
-    let NERDTreeChDirMode=0
-    let NERDTreeQuitOnOpen=1
-    let NERDTreeMouseMode=2
-    let NERDTreeShowHidden=1
-    let NERDTreeKeepTreeInNewTab=1
-    let g:nerdtree_tabs_open_on_gui_startup=0
-endif
-
 if isdirectory(expand("~/.vim/plugged/undotree/"))
     nnoremap <Leader>u :UndotreeToggle<CR>
     " If undotree is opened, it is likely one wants to interact with it.
@@ -298,6 +281,7 @@ let g:sqlfmt_options = ""
 let g:sqlfmt_auto = 1
 
 let g:ycm_server_python_interpreter = '/usr/bin/python'
+let g:ycm_auto_hover = 'x'
 
 :vnoremap <leader>64e c<c-r>=system("base64 -w 0", @")<cr><esc>
 :vnoremap <leader>64d c<c-r>=system("base64 -d", @")<cr><esc>
@@ -305,6 +289,8 @@ let g:ycm_server_python_interpreter = '/usr/bin/python'
 let g:markdown_fenced_languages = ['html', 'go', 'vim', 'python', 'bash=sh']
 let g:markdown_syntax_conceal = 0
 
+let g:go_info_mode = 'gopls'
+let g:go_def_mode = 'gopls'
 let g:go_fmt_command = "goimports"
 let g:go_fmt_options = {
     \ 'gofmt': '-s',
@@ -317,9 +303,8 @@ let g:go_highlight_methods = 1
 let g:go_metalinter_autosave = 1
 "let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck', 'misspell', 'vetshadow', 'gotype', 'megacheck', 'goconst', 'ineffassign', 'staticcheck', 'gocyclo', 'gosec']
 let g:go_metalinter_deadline = "15s"
-"let g:go_metalinter_command='golangci-lint'
 let g:go_list_type = "quickfix"
-let g:go_auto_type_info = 1
+let g:go_auto_type_info = 0
 let g:go_auto_sameids = 1
 
 map <C-n> :cnext<CR>
@@ -353,5 +338,5 @@ endfunction
 let g:PyFlakeOnWrite = 1
 autocmd BufWritePre *.py execute ':Black'
 
-let g:shfmt_extra_args = '-i 4'
+let g:shfmt_extra_args = '-i 4 -s -ci'
 let g:shfmt_fmt_on_save = 1

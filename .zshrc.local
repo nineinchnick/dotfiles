@@ -30,7 +30,7 @@ grml_theme_add_token  virtual-env -f virtual_env_prompt '%F{magenta}' '%f'
 zstyle ':prompt:grml:left:setup' items rc virtual-env change-root user at host path vcs percent
 
 alias ls='ls --color=auto'
-eval `dircolors -b`
+eval $(dircolors -b)
 export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
 export CLICOLOR=1
 zstyle ':completion:*:default' list-colors ''
@@ -50,6 +50,12 @@ alias ag='ag --path-to-ignore ~/.ignore'
 unalias ago 2>/dev/null || true
 alias ago='ag --path-to-ignore ~/.ignore --go'
 viag() { vim -c "Ag $*" }
+
+# SP  ' '  0x20 = · U+00B7 Middle Dot
+# TAB '\t' 0x09 = ￫ U+FFEB Halfwidth Rightwards Arrow
+# CR  '\r' 0x0D = § U+00A7 Section Sign (⏎ U+23CE also works fine)
+# LF  '\n' 0x0A = ¶ U+00B6 Pilcrow Sign (was "Paragraph Sign")
+alias whitespace="sed 's/ /·/g;s/\t/￫/g;s/\r/§/g;s/$/¶/g'"
 
 export PATH=${KREW_ROOT:-$HOME/.krew}/bin:$HOME/bin:$(go env GOPATH)/bin:$HOME/.local/bin:$PATH
 export GOPATH=$(go env GOPATH)
@@ -80,6 +86,10 @@ export QT_STYLE_OVERRIDE=adwaita
 export GTK_THEME=Adwaita:dark
 export DOCKER_BUILDKIT=0
 export ANSIBLE_NOCOWS=1
+
+batdiff() {
+    git diff --name-only --diff-filter=d 2>/dev/null | xargs bat --diff
+}
 
 if ! pgrep -u "$USER" ssh-agent > /dev/null; then
     ssh-agent > ~/.ssh-agent-thing

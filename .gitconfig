@@ -11,3 +11,9 @@
 	version = 2
 [init]
 	templatedir = ~/.git_template
+[push]
+	default = upstream
+[pull]
+	ff = only
+[submodule]
+	recurse = true
