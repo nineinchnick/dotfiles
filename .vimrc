@@ -50,8 +50,8 @@ Plug 'hail2u/vim-css3-syntax'
 Plug 'gorodinskiy/vim-coloresque'
 Plug 'tpope/vim-markdown'
 Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
-Plug 'psf/black', { 'tag': '19.10b0' }
-Plug 'andviro/flake8-vim'
+Plug 'psf/black'
+Plug 'nvie/vim-flake8'
 Plug 'z0mbix/vim-shfmt', { 'for': 'sh' }
 call plug#end()
 
@@ -185,6 +185,7 @@ map <leader>fc /\v^[<\|=>]{7}( .*\|$)<CR>
 map <leader>fz :FZF<CR>
 map <leader>fa :Ag<CR>
 command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, "--path-to-ignore ~/.ignore", <bang>0)
+nnoremap <silent> <leader>j :GFiles --cached --others --exclude-standard<cr>
 
 " Mapping selecting mappings
 nmap <leader><tab> <plug>(fzf-maps-n)
