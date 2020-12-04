@@ -12,7 +12,7 @@
 [init]
 	templatedir = ~/.git_template
 [push]
-	default = upstream
+	default = current
 [pull]
 	ff = only
 [submodule]
