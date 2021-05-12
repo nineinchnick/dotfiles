@@ -57,6 +57,8 @@ viag() { vim -c "Ag $*" }
 # LF  '\n' 0x0A = ¶ U+00B6 Pilcrow Sign (was "Paragraph Sign")
 alias whitespace="sed 's/ /·/g;s/\t/￫/g;s/\r/§/g;s/$/¶/g'"
 
+alias k=kubectl
+
 export PATH=${KREW_ROOT:-$HOME/.krew}/bin:$HOME/bin:$(go env GOPATH)/bin:$HOME/.local/bin:$PATH
 export GOPATH=$(go env GOPATH)
 export EDITOR=/bin/vim
@@ -65,8 +67,10 @@ stty stop undef
 
 if [ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
     source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-else
+elif [ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
     source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+elif [ -f /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
+    source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
 if [ -f ~/.fzf.zsh ]; then
     source ~/.fzf.zsh
@@ -78,7 +82,7 @@ export FZF_COMPLETION_TRIGGER='~~'
 export WORKON_HOME=~/.virtualenvs
 if [ -f /usr/share/virtualenvwrapper/virtualenvwrapper.sh ]; then
     source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
-else
+elif [ -f /usr/bin/virtualenvwrapper.sh ]; then
     source /usr/bin/virtualenvwrapper.sh
 fi
 export GIT_SSH=/usr/bin/ssh
@@ -112,16 +116,33 @@ if [ $commands[minikube] ]; then
     export KUBECONFIG=$HOME/.kube/config
 fi
 
+if [ $commands[pip3] ]; then
+    source <(pip3 completion --zsh)
+elif [ $commands[pip] ]; then
+    source <(pip completion --zsh)
+fi
+
 if [ -f /usr/bin/aws_zsh_completer.sh ]; then
     source /usr/bin/aws_zsh_completer.sh
 fi
 
-if [ $commands[kind] ]; then
-  source <(kind completion zsh)
-fi
+for c in kubectl kind helm; do
+    if [ $commands[$c] ]; then
+      source <($c completion zsh)
+    fi
+done
 
 if [ -f /usr/share/nvm/init-nvm.sh ]; then
     source /usr/share/nvm/init-nvm.sh
+fi
+
+if [ $commands[terraform] ]; then
+    autoload -U +X bashcompinit && bashcompinit
+    complete -o nospace -C /usr/local/bin/terraform terraform
+fi
+
+if [ $commands[clusterctl] ]; then
+    source <(clusterctl completion zsh)
 fi
 
 fortune | cowsay -n
