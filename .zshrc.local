@@ -21,6 +21,10 @@ RPROMPT='%~'
 
 WORDCHARS=${WORDCHARS//\/}
 
+if [ -f /opt/homebrew/bin/brew ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
 # Virtualenv support
 
 function virtual_env_prompt () {
@@ -30,7 +34,11 @@ grml_theme_add_token  virtual-env -f virtual_env_prompt '%F{magenta}' '%f'
 zstyle ':prompt:grml:left:setup' items rc virtual-env change-root user at host path vcs percent
 
 alias ls='ls --color=auto'
-eval $(dircolors -b)
+if [ $commands[gdircolors] ]; then
+    eval $(gdircolors -b)
+else
+    eval $(dircolors -b)
+fi
 export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
 export CLICOLOR=1
 zstyle ':completion:*:default' list-colors ''
@@ -58,6 +66,8 @@ viag() { vim -c "Ag $*" }
 alias whitespace="sed 's/ /·/g;s/\t/￫/g;s/\r/§/g;s/$/¶/g'"
 
 alias k=kubectl
+# alias docker=podman
+alias ssh="kitty +kitten ssh"
 
 export PATH=${KREW_ROOT:-$HOME/.krew}/bin:$HOME/bin:$(go env GOPATH)/bin:$HOME/.local/bin:$PATH
 export GOPATH=$(go env GOPATH)
@@ -88,7 +98,7 @@ fi
 export GIT_SSH=/usr/bin/ssh
 export QT_STYLE_OVERRIDE=adwaita
 export GTK_THEME=Adwaita:dark
-export DOCKER_BUILDKIT=0
+export DOCKER_BUILDKIT=1
 export ANSIBLE_NOCOWS=1
 
 batdiff() {
@@ -126,7 +136,7 @@ if [ -f /usr/bin/aws_zsh_completer.sh ]; then
     source /usr/bin/aws_zsh_completer.sh
 fi
 
-for c in kubectl kind helm; do
+for c in kubectl kind helm clusterctl; do
     if [ $commands[$c] ]; then
       source <($c completion zsh)
     fi
@@ -135,15 +145,15 @@ done
 if [ -f /usr/share/nvm/init-nvm.sh ]; then
     source /usr/share/nvm/init-nvm.sh
 fi
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
 if [ $commands[terraform] ]; then
     autoload -U +X bashcompinit && bashcompinit
     complete -o nospace -C /usr/local/bin/terraform terraform
 fi
 
-if [ $commands[clusterctl] ]; then
-    source <(clusterctl completion zsh)
-fi
 
 fortune | cowsay -n
 
